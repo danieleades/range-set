@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, iter::FromIterator};
 use step::Step;
 
 use crate::{element::Element, storage::Storage};
@@ -57,5 +57,45 @@ where
         };
 
         false
+    }
+
+    pub fn into_tuples(self) -> impl Iterator<Item = (T, T)> {
+        self.storage.into_iter().map(Into::into)
+    }
+}
+
+impl<T> FromIterator<(T, T)> for Set<T>
+where
+    T: Ord + Step + Clone,
+{
+    fn from_iter<I: IntoIterator<Item = (T, T)>>(iter: I) -> Self {
+        let storage = iter
+            .into_iter()
+            .map(|(start, end)| Element::new(start, end))
+            .collect();
+        Self { storage }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Set;
+
+    #[test]
+    fn iter() {
+        let mut set = Set::default();
+
+        for x in [45_u32, 12_u32, 789_u32, 14_u32, 13_u32] {
+            set.insert(x);
+        }
+
+        let tuples: Vec<(u32, u32)> = set.into_tuples().collect();
+
+        assert_eq!(
+            &tuples,
+            &vec![(12_u32, 14_u32), (45_u32, 45_u32), (789_u32, 789_u32)]
+        );
+
+        let _new_set: Set<u32> = tuples.into_iter().collect();
     }
 }
