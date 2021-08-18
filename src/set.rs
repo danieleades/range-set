@@ -85,8 +85,8 @@ mod tests {
     fn iter() {
         let mut set = Set::default();
 
-        for x in [45_u32, 12_u32, 789_u32, 14_u32, 13_u32] {
-            set.insert(x);
+        for x in &[45_u32, 12_u32, 789_u32, 14_u32, 13_u32] {
+            set.insert(*x);
         }
 
         let tuples: Vec<(u32, u32)> = set.into_tuples().collect();
