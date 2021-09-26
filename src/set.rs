@@ -23,8 +23,7 @@ where
 
 impl<T, S: Storage<T>> Set<T, S>
 where
-    T: PartialEq + Step + std::fmt::Debug,
-    S: std::fmt::Debug,
+    T: PartialEq + Step,
 {
     /// Check whether an element is contained within the set
     pub fn contains(&self, element: &T) -> bool {
@@ -37,14 +36,11 @@ where
             let prev_adjacent = r.end == element;
             (r, prev_adjacent)
         });
-        dbg!(&prev_range);
+
         let next_range = self.storage.take_next_range(&element).map(|r| {
             let next_adjacent = element.next().as_ref() == Some(&r.start);
             (r, next_adjacent)
         });
-        dbg!(&next_range);
-
-        dbg!(&self);
 
         match (prev_range, next_range) {
             (None, None) => {
