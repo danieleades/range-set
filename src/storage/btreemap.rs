@@ -32,7 +32,7 @@ where
 
     fn insert_range(&mut self, range: std::ops::Range<T>) {
         if self.insert(range.start, range.end).is_some() {
-            panic!("range already present!")
+            panic!("range already present!");
         }
     }
 }
@@ -49,7 +49,7 @@ mod tests {
     #[test]
     fn contains() {
         let input = [(1, 2), (5, 10)];
-        let map: BTreeMap<i32, i32> = input.into_iter().collect();
+        let map: BTreeMap<i32, i32> = input.iter().copied().collect();
 
         assert!(map.contains(&1));
         assert!(!map.contains(&2));
