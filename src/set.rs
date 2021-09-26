@@ -9,9 +9,22 @@ pub struct Set<T, S: Storage<T> = BTreeMap<T, T>> {
     t: PhantomData<T>,
 }
 
+impl<T> Default for Set<T, BTreeMap<T, T>>
+where
+    T: Ord + Clone,
+{
+    fn default() -> Self {
+        let storage = BTreeMap::default();
+        let t = PhantomData;
+
+        Self { storage, t }
+    }
+}
+
 impl<T, S: Storage<T>> Set<T, S>
 where
-    T: PartialEq + Step,
+    T: PartialEq + Step + std::fmt::Debug,
+    S: std::fmt::Debug,
 {
     /// Check whether an element is contained within the set
     pub fn contains(&self, element: &T) -> bool {
@@ -24,10 +37,14 @@ where
             let prev_adjacent = r.end == element;
             (r, prev_adjacent)
         });
+        dbg!(&prev_range);
         let next_range = self.storage.take_next_range(&element).map(|r| {
             let next_adjacent = element.next().as_ref() == Some(&r.start);
             (r, next_adjacent)
         });
+        dbg!(&next_range);
+
+        dbg!(&self);
 
         match (prev_range, next_range) {
             (None, None) => {
@@ -90,5 +107,25 @@ where
     fn extend_lower(mut self) -> Self {
         self.start = self.start.prev().unwrap();
         self
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Set;
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn btreemap() {
+        let mut set: Set<u32> = Set::default();
+        set.insert(1);
+        set.insert(3);
+        set.insert(7);
+        set.insert(5);
+        set.insert(4);
+
+        let expected: BTreeMap<u32, u32> = [(1, 2), (3, 6), (7, 8)].into_iter().collect();
+
+        assert_eq!(set.storage, expected);
     }
 }

@@ -31,8 +31,9 @@ where
     }
 
     fn insert_range(&mut self, range: std::ops::Range<T>) {
-        self.insert(range.start, range.end)
-            .expect("range already present!");
+        if self.insert(range.start, range.end).is_some() {
+            panic!("range already present!")
+        }
     }
 }
 
