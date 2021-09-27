@@ -57,6 +57,10 @@ where
 
     /// Insert a new element into the set
     pub fn insert(&mut self, element: T) {
+        if self.contains(&element) {
+            return;
+        }
+
         let prev_range = self.take_prev_range(&element).map(|r| {
             let prev_adjacent = r.end == element;
             (r, prev_adjacent)
@@ -151,6 +155,7 @@ mod tests {
         set.insert(3);
         set.insert(7);
         set.insert(5);
+        set.insert(4);
         set.insert(4);
 
         let expected: BTreeMap<u32, u32> = [(1, 2), (3, 6), (7, 8)].iter().copied().collect();
