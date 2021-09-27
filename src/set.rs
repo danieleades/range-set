@@ -9,7 +9,10 @@ impl<T> Element for T where T: Num + Clone + Ord + Bounded {}
 
 /// A space-efficient set for mostly contiguous data
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct Set<T> {
+pub struct Set<T>
+where
+    T: Element,
+{
     storage: BTreeMap<T, T>,
 }
 
