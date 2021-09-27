@@ -8,7 +8,7 @@ pub trait Element: Num + Clone + Ord + Bounded {}
 impl<T> Element for T where T: Num + Clone + Ord + Bounded {}
 
 /// A space-efficient set for mostly contiguous data
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, PartialEq)]
 pub struct Set<T> {
     storage: BTreeMap<T, T>,
 }
@@ -153,5 +153,19 @@ mod tests {
         let expected: BTreeMap<u32, u32> = [(1, 2), (3, 6), (7, 8)].iter().copied().collect();
 
         assert_eq!(set.storage, expected);
+    }
+
+    #[test]
+    fn compliment_round_trip() {
+        let mut expected: Set<u32> = Set::default();
+        expected.insert(1);
+        expected.insert(3);
+        expected.insert(7);
+        expected.insert(5);
+        expected.insert(4);
+
+        let set = expected.clone().into_compliment().into_compliment();
+
+        assert_eq!(set, expected);
     }
 }
