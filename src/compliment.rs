@@ -57,34 +57,13 @@ where
 #[cfg(test)]
 mod tests {
     use super::Iter;
+    use test_case::test_case;
 
-    #[test]
-    fn case1() {
-        let input: Vec<(u32, u32)> = vec![(3, 5), (9, 12)];
+    #[test_case(vec![(3, 5), (9, 12)] => vec![(0, 3), (5, 9), (12, u32::MAX)] ; "simple")]
+    #[test_case(vec![(0, 5), (9, 12)] => vec![(5, 9), (12, u32::MAX)] ; "bounded by zero")]
+    #[test_case(vec![(3, 5), (9, u32::MAX)] => vec![(0, 3), (5, 9)] ; "bounded by MAX")]
+    fn compliment(input: Vec<(u32, u32)>) -> Vec<(u32, u32)> {
         let iter = Iter::new(input.into_iter());
-
-        let expected = vec![(0, 3), (5, 9), (12, u32::MAX)];
-
-        assert_eq!(iter.collect::<Vec<_>>(), expected);
-    }
-
-    #[test]
-    fn case2() {
-        let input: Vec<(u32, u32)> = vec![(0, 5), (9, 12)];
-        let iter = Iter::new(input.into_iter());
-
-        let expected = vec![(5, 9), (12, u32::MAX)];
-
-        assert_eq!(iter.collect::<Vec<_>>(), expected);
-    }
-
-    #[test]
-    fn case3() {
-        let input: Vec<(u32, u32)> = vec![(3, 5), (9, u32::MAX)];
-        let iter = Iter::new(input.into_iter());
-
-        let expected = vec![(0, 3), (5, 9)];
-
-        assert_eq!(iter.collect::<Vec<_>>(), expected);
+        iter.collect::<Vec<_>>()
     }
 }

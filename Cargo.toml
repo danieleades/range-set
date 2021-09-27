@@ -7,3 +7,6 @@ edition = "2018"
 
 [dependencies]
 num-traits = "0.2.14"
+
+[dev-dependencies]
+test-case = "1.2.0"
