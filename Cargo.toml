@@ -2,6 +2,11 @@
 name = "range-set"
 version = "0.1.0"
 edition = "2018"
+description = "A range-based, space-efficient 'set' collection for mostly contiguous elements"
+repository = "https://github.com/danieleades/range-set"
+license = "MIT"
+keywords = ["set", "range", "contiguous"]
+categories = ["caching", "compression", "database", "data-structures", "encoding"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
