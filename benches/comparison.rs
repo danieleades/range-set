@@ -1,10 +1,10 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use rand::{RngCore, SeedableRng};
+use rand::{distributions::Uniform, prelude::Distribution, SeedableRng};
 
 fn random_values(seed: u64, n: usize) -> impl Iterator<Item = u32> {
-    let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
-
-    std::iter::from_fn(move || Some(rng.next_u32())).take(n)
+    let rng = rand::rngs::StdRng::seed_from_u64(seed);
+    let range = Uniform::from(0..100_000);
+    range.sample_iter(rng).take(n)
 }
 
 fn range_set(input: impl Iterator<Item = u32>) {
@@ -26,7 +26,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let seed = 12345;
 
-    for n in [1000, 10_000, 100_000, 1_000_000] {
+    for n in [100_000] {
         group.bench_with_input("ranged-set", &n, |b, &n| {
             b.iter_batched(
                 || random_values(seed, n),
