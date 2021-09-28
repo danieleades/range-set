@@ -157,6 +157,7 @@ mod tests {
         set.insert(5);
         set.insert(4);
         set.insert(4);
+        set.insert(1);
 
         let expected: BTreeMap<u32, u32> = [(1, 2), (3, 6), (7, 8)].iter().copied().collect();
 
