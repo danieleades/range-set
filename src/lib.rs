@@ -5,6 +5,5 @@
 
 mod compliment;
 mod set;
-mod storage;
 
 pub use set::Set;
