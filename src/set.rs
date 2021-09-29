@@ -3,9 +3,9 @@ use std::{collections::BTreeMap, ops::Range};
 
 use crate::compliment;
 
-pub trait Element: Num + Clone + Ord + Bounded {}
+pub trait Element: Num + Clone + Ord {}
 
-impl<T> Element for T where T: Num + Clone + Ord + Bounded {}
+impl<T> Element for T where T: Num + Clone + Ord {}
 
 /// A space-efficient set for mostly contiguous data
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -94,7 +94,12 @@ where
             }
         }
     }
+}
 
+impl<T> Set<T>
+where
+    T: Element + Bounded,
+{
     /// Convert this set into its compliment
     #[must_use]
     pub fn into_compliment(self) -> Self {
